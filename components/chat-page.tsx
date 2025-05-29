@@ -62,8 +62,8 @@ export default function ChatPage({ mode, onModeChange }: ChatPageProps) {
     setIsTyping(true);
 
     try {
-      // Call real API
-      const apiResponse = await sendChatMessage(content, mode, messages[mode]);
+      // Call real API - 传递包含新用户消息的完整历史
+      const apiResponse = await sendChatMessage('', mode, updatedMessages[mode]);
       
       const aiMessage = {
         id: uuidv4(),

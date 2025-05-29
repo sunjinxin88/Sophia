@@ -2,6 +2,9 @@ import { ChatMode, Message } from '@/lib/types';
 
 export interface ChatResponse {
   content: string;
+  analysis?: string;
+  suggestion?: string;
+  followUp?: string;
   error?: string;
 }
 
@@ -11,8 +14,59 @@ export interface StreamCallbacks {
   onComplete?: (finalContent: string) => void;
 }
 
+/**
+ * 解析分析模式的 AI 响应，增强容错性并优化主内容显示
+ */
+function parseAnalysisResponse(response: string): ChatResponse {
+  let analysisText: string | undefined;
+  let suggestionText: string | undefined;
+  let followUpText: string | undefined;
+  let mainContent: string;
+
+  const trimmedResponse = response.trim();
+
+  // 尝试解析 "情境更新与分析" 或 "分析"
+  const followUpAnalysisMatch = trimmedResponse.match(/\*\*情境更新与分析：\*\*\s*([\s\S]*?)(?=\*\*建议回复：\*\*|$)/);
+  if (followUpAnalysisMatch && followUpAnalysisMatch[1]) {
+    analysisText = followUpAnalysisMatch[1].trim();
+  } else {
+    const fullAnalysisMatch = trimmedResponse.match(/\*\*分析：\*\*\s*([\s\S]*?)(?=\*\*建议回复：\*\*|$)/);
+    if (fullAnalysisMatch && fullAnalysisMatch[1]) {
+      analysisText = fullAnalysisMatch[1].trim();
+    }
+  }
+
+  // 尝试解析 "建议回复"
+  const suggestionMatch = trimmedResponse.match(/\*\*建议回复：\*\*\s*"([^"]*)"|\*\*建议回复：\*\*\s*([\s\S]*?)(?=\*\*后续问题：\*\*|$)/);
+  if (suggestionMatch) {
+    suggestionText = (suggestionMatch[1] || suggestionMatch[2])?.trim();
+  }
+
+  // 尝试解析 "后续问题"
+  const followUpMatch = trimmedResponse.match(/\*\*后续问题：\*\*\s*([\s\S]*?)$/);
+  if (followUpMatch && followUpMatch[1]) {
+    followUpText = followUpMatch[1].trim();
+  }
+  
+  // 根据解析结果决定主气泡内容
+  if (analysisText || suggestionText || followUpText) {
+    // 如果有任何结构化内容被解析出来，主气泡可以非常简洁或为空
+    mainContent = ""; // 或者 "分析详情如下：" 等，根据UI需求调整
+  } else {
+    // 如果没有任何结构化内容，主气泡显示AI的完整回复
+    mainContent = trimmedResponse;
+  }
+
+  return {
+    content: mainContent,
+    analysis: analysisText,
+    suggestion: suggestionText,
+    followUp: followUpText,
+  };
+}
+
 export async function sendChatMessage(
-  message: string,
+  message: string, // 保留但不使用，为了向后兼容
   mode: ChatMode,
   conversationHistory: Message[] = [],
   callbacks?: StreamCallbacks
@@ -26,7 +80,6 @@ export async function sendChatMessage(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        message,
         mode,
         conversationHistory: conversationHistory.slice(-10), // 只发送最近10条消息作为上下文
       }),
@@ -53,12 +106,14 @@ export async function sendChatMessage(
         const chunk = decoder.decode(value, { stream: true });
         accumulatedContent += chunk;
 
-        // 调用回调函数处理每个数据块
         callbacks?.onChunk?.(chunk);
       }
 
-      // 流式读取完成，调用完成回调
       callbacks?.onComplete?.(accumulatedContent);
+
+      if (mode === 'analysis') {
+        return parseAnalysisResponse(accumulatedContent);
+      }
 
       return {
         content: accumulatedContent
@@ -77,6 +132,6 @@ export async function sendChatMessage(
       error: error.message || '网络请求失败'
     };
   } finally {
-    controller.abort(); // 清理请求
+    controller.abort();
   }
 } 
