@@ -6,8 +6,8 @@ import { ThemeProvider } from '@/components/theme-provider';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Chat Analysis Assistant',
-  description: 'A helpful assistant for chat analysis and emotional support',
+  title: 'easybina - Hole Tree',
+  description: 'A friendly chat companion for emotional support and listening',
 };
 
 export default function RootLayout({

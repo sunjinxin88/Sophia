@@ -1,4 +1,6 @@
-# 🚀 Sophia 聊天助手设置指南
+# 🚀 easybina 聊天助手设置指南
+
+这是一个基于 OpenRouter API 的友善聊天伙伴项目，专注于提供情感支持和陪伴。本指南将帮助你快速设置并运行应用。
 
 ## 当前状态
 ✅ 项目已成功启动在 http://localhost:3000  
@@ -34,7 +36,7 @@ nano .env.local
 # OpenRouter API 配置
 OPENROUTER_API_KEY=sk-or-v1-your-actual-api-key-here
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
-NEXT_PUBLIC_SITE_NAME=Sophia Chat Assistant
+NEXT_PUBLIC_SITE_NAME=easybina - Hole Tree
 ```
 
 **重要**: 将 `sk-or-v1-your-actual-api-key-here` 替换为您从 OpenRouter 获取的真实 API 密钥。
@@ -50,28 +52,24 @@ npm run dev
 ### 步骤 4: 测试功能
 
 1. 访问 http://localhost:3000
-2. 选择 "分析与建议" 或 "树洞" 模式
+2. 点击 "Just Want to Talk" 开始聊天
 3. 发送一条测试消息
 4. 等待 AI 回复
 
 ## 🎯 使用指南
 
-### 分析与建议模式
-- 适合需要对话分析和回复建议的场景
-- AI 会分析对话背景、情感状态，并提供具体的回复建议
-- 可以复制建议的回复内容
-
 ### 树洞模式  
-- 适合情感宣泄和心理支持
-- AI 会提供温暖的陪伴，不会分析或评判
-- 专注于倾听和情感支持
+- 提供安全的情感宣泄空间
+- AI 会提供温暖的陪伴和情感支持
+- 专注于倾听，不会分析或评判
+- 非评判性的倾听环境
 
 ## 🔧 技术细节
 
 - **AI 模型**: Google Gemini 2.5 Flash Preview
 - **API 服务**: OpenRouter
 - **数据存储**: 浏览器本地存储（LocalStorage）
-- **聊天记录**: 按模式分别保存，自动持久化
+- **聊天记录**: 自动持久化保存
 
 ## ❓ 常见问题
 

@@ -1,6 +1,6 @@
-# Sophia Chat Assistant
+# easybina - Hole Tree
 
-一个智能聊天助手应用，提供对话分析和情感支持功能。本项目使用 OpenRouter API 作为 AI 服务提供商。
+一个友善的聊天伙伴应用，提供情感支持和倾听服务。本项目使用 OpenRouter API 作为 AI 服务提供商。
 
 ## 🔑 OpenRouter API 配置
 
@@ -14,12 +14,6 @@
    ```
 
 ## 功能特色
-
-### 🎯 分析与建议模式
-- 分析对话内容的语气、情感和潜在含义
-- 提供个性化的回复建议
-- 生成后续问题帮助深入理解
-- 支持一键复制建议回复
 
 ### 🌿 树洞模式
 - 提供安全的情感宣泄空间
@@ -52,7 +46,7 @@ npm install
 # OpenRouter API 配置
 OPENROUTER_API_KEY=your_api_key_here
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
-NEXT_PUBLIC_SITE_NAME=Sophia Chat Assistant
+NEXT_PUBLIC_SITE_NAME=easybina - Hole Tree
 ```
 
 ### 3. 启动开发服务器

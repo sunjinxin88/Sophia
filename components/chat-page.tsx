@@ -17,7 +17,6 @@ interface ChatPageProps {
 
 export default function ChatPage({ mode, onModeChange }: ChatPageProps) {
   const [messages, setMessages] = useLocalStorage<ModeMessages>("chat-messages", {
-    analysis: [],
     treehole: [],
   });
   
@@ -70,11 +69,6 @@ export default function ChatPage({ mode, onModeChange }: ChatPageProps) {
         role: "assistant" as const,
         content: apiResponse.content,
         timestamp: Date.now(),
-        ...(mode === 'analysis' && {
-          analysis: apiResponse.analysis,
-          suggestion: apiResponse.suggestion,
-          followUp: apiResponse.followUp,
-        }),
       };
 
       setMessages({
@@ -111,7 +105,7 @@ export default function ChatPage({ mode, onModeChange }: ChatPageProps) {
                   <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
                   <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                 </div>
-                <span className="text-sm text-gray-500">Sophia 正在思考...</span>
+                <span className="text-sm text-gray-500">easybina 正在思考...</span>
               </div>
             )}
             {error && (
